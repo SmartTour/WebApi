@@ -51,7 +51,6 @@ namespace smart_tour_api.Controllers
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
-            var a = this.User;
             var user = await _context.Users.FindAsync(id);
 
             if (user == null)
