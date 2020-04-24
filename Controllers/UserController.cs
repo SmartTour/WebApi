@@ -17,19 +17,19 @@ namespace smart_tour_api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class UsersController : ControllerBase
+    public class UserController : ControllerBase
     {
         private readonly SmartTourContext _context;
         private IUserService _userService;
 
-        public UsersController(SmartTourContext context, IUserService userService)
+        public UserController(SmartTourContext context, IUserService userService)
         {
             _context = context;
             _userService = userService;
         }
 
         [AllowAnonymous]
-        [HttpPost("authenticate")]
+        [HttpPost("login")]
         public IActionResult Authenticate([FromBody]AuthenticateModel model)
         {
             var user = _userService.Authenticate(model.Username, model.Password);
@@ -39,14 +39,63 @@ namespace smart_tour_api.Controllers
 
             return Ok(user);
         }
-        // GET: api/Users
-        [AllowAnonymous]
+        [HttpGet("data")]
+        public async Task<ActionResult<User>> GetUserData()
+        {
+            //var userMaybe = this.User.Identities.First();
+            //int id = int.Parse(userMaybe.Name);
+            int id = _userService.GetUserId(this.User);
+            var user = await _context.Users.FindAsync(id);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+        }
+
+        [HttpPut("data")]
+        public async Task<IActionResult> PutUserData(User user)
+        {
+            int id=_userService.GetUserId(this.User);
+            if (id != user.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(user).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!UserExists(id))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
+        //API DI SUPPORTO
+
+        // GET: api/User
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
             return await _context.Users.ToListAsync();
         }
 
+        [AllowAnonymous]
         // GET: api/Users/5
         [HttpGet("{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
@@ -60,24 +109,13 @@ namespace smart_tour_api.Controllers
 
             return user;
         }
-        [HttpGet("autenticato")]
-        public async Task<ActionResult<User>> GetUserAutenticato()
-        {
-            var userMaybe = this.User.Identities.First();
-            int id = int.Parse(userMaybe.Name);
-            var user = await _context.Users.FindAsync(id);
 
-            if (user == null)
-            {
-                return NotFound();
-            }
-
-            return user;
-        }
+        
 
         // PUT: api/Users/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
+        [AllowAnonymous]
         [HttpPut("{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
@@ -110,6 +148,7 @@ namespace smart_tour_api.Controllers
         // POST: api/Users
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
+        [AllowAnonymous]
         [HttpPost]
         public async Task<ActionResult<User>> PostUser(User user)
         {
@@ -120,6 +159,7 @@ namespace smart_tour_api.Controllers
         }
 
         // DELETE: api/Users/5
+        [AllowAnonymous]
         [HttpDelete("{id}")]
         public async Task<ActionResult<User>> DeleteUser(int id)
         {

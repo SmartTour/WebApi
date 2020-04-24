@@ -17,6 +17,7 @@ namespace smart_tour_api.Servicies
     public interface IUserService
     {
         User Authenticate(string username, string password);
+        int GetUserId(ClaimsPrincipal user);
         IEnumerable<User> GetAll();
     }
     public class UserService : IUserService
@@ -55,6 +56,18 @@ namespace smart_tour_api.Servicies
             user.Token = tokenHandler.WriteToken(token);
 
             return user.WithoutPassword();
+        }
+
+        public int GetUserId(ClaimsPrincipal user)
+        {
+            var userMaybe = user.Identities.First();
+            int id = int.Parse(userMaybe.Name);
+            return id;
+        }
+        public async Task<Agency> GetAgencyById(int idUser)
+        {
+            var user= await _context.Users.FindAsync(idUser);
+            return user.Agency;
         }
 
         public IEnumerable<User> GetAll()

@@ -20,7 +20,7 @@ namespace smart_tour_api.Entities
         [Required]
         public string Password { get; set; }
         public string Token { get; set; }
-
+        public int IDAgency { get; set; }
         public Agency Agency { get; set; }
         
     }

@@ -25,11 +25,12 @@ namespace smart_tour_api.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    FirstName = table.Column<string>(nullable: true),
-                    LastName = table.Column<string>(nullable: true),
-                    Username = table.Column<string>(nullable: true),
-                    Password = table.Column<string>(nullable: true),
+                    FirstName = table.Column<string>(nullable: false),
+                    LastName = table.Column<string>(nullable: false),
+                    Username = table.Column<string>(nullable: false),
+                    Password = table.Column<string>(nullable: false),
                     Token = table.Column<string>(nullable: true),
+                    IDAgency = table.Column<int>(nullable: false),
                     AgencyId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>

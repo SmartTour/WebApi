@@ -34,7 +34,9 @@ namespace smart_tour_api
         {
             services.AddControllers();
             services.AddDbContext<SmartTourContext>(opt =>
-               opt.UseSqlServer(Configuration.GetConnectionString("DBcontext")));
+               opt.UseSqlServer(Configuration.GetConnectionString("DBConnection")));
+
+            services.AddCors();
 
             //configure authentication
 
@@ -82,7 +84,7 @@ namespace smart_tour_api
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseCors(x => x
+            app.UseCors(builder => builder
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader());

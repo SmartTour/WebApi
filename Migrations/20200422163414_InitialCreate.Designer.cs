@@ -10,8 +10,8 @@ using smart_tour_api.Data;
 namespace smart_tour_api.Migrations
 {
     [DbContext(typeof(SmartTourContext))]
-    [Migration("20200418163232_required in user")]
-    partial class requiredinuser
+    [Migration("20200422163414_InitialCreate")]
+    partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -50,6 +50,9 @@ namespace smart_tour_api.Migrations
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("IDAgency")
+                        .HasColumnType("int");
 
                     b.Property<string>("LastName")
                         .IsRequired()
