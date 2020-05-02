@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using smart_tour_api.Data;
 
 namespace smart_tour_api.Migrations
 {
     [DbContext(typeof(SmartTourContext))]
-    partial class SmartTourContextModelSnapshot : ModelSnapshot
+    [Migration("20200429115029_AddEntities")]
+    partial class AddEntities
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -85,29 +87,16 @@ namespace smart_tour_api.Migrations
 
             modelBuilder.Entity("smart_tour_api.Entities.BaseTourZone", b =>
                 {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
                     b.Property<int>("BaseTourID")
                         .HasColumnType("int");
 
                     b.Property<int>("ContentID")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
                     b.Property<int>("Order")
                         .HasColumnType("int");
 
-                    b.HasKey("Id");
-
-                    b.HasIndex("BaseTourID");
+                    b.HasKey("BaseTourID", "ContentID");
 
                     b.HasIndex("ContentID");
 
@@ -226,47 +215,6 @@ namespace smart_tour_api.Migrations
                     b.ToTable("LiveTours");
                 });
 
-            modelBuilder.Entity("smart_tour_api.Entities.LiveTourZone", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int")
-                        .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
-
-                    b.Property<int>("ContentID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreationDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("DetectionElementID")
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("LastModifiedDate")
-                        .HasColumnType("datetime2");
-
-                    b.Property<int>("LiveTourID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("NextIndicationID")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Order")
-                        .HasColumnType("int");
-
-                    b.HasKey("Id");
-
-                    b.HasIndex("ContentID");
-
-                    b.HasIndex("DetectionElementID");
-
-                    b.HasIndex("LiveTourID");
-
-                    b.HasIndex("NextIndicationID");
-
-                    b.ToTable("LiveTourZone");
-                });
-
             modelBuilder.Entity("smart_tour_api.Entities.User", b =>
                 {
                     b.Property<int>("Id")
@@ -357,33 +305,6 @@ namespace smart_tour_api.Migrations
                         .WithMany("LiveTours")
                         .HasForeignKey("AgencyID")
                         .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("smart_tour_api.Entities.LiveTourZone", b =>
-                {
-                    b.HasOne("smart_tour_api.Entities.Content", "Content")
-                        .WithMany("LiveTourZones")
-                        .HasForeignKey("ContentID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("smart_tour_api.Entities.DetectionElement", "DetectionElement")
-                        .WithMany("LiveTourZones")
-                        .HasForeignKey("DetectionElementID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("smart_tour_api.Entities.LiveTour", "LiveTour")
-                        .WithMany("LiveTourZones")
-                        .HasForeignKey("LiveTourID")
-                        .OnDelete(DeleteBehavior.NoAction)
-                        .IsRequired();
-
-                    b.HasOne("smart_tour_api.Entities.Indication", "NextIndication")
-                        .WithMany("LiveTourZones")
-                        .HasForeignKey("NextIndicationID")
-                        .OnDelete(DeleteBehavior.NoAction)
                         .IsRequired();
                 });
 

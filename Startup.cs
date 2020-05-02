@@ -14,6 +14,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
 using smart_tour_api.Data;
 using smart_tour_api.Helpers;
 using smart_tour_api.Servicies;
@@ -37,6 +38,11 @@ namespace smart_tour_api
                opt.UseSqlServer(Configuration.GetConnectionString("DBConnection")));
 
             services.AddCors();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc(name:"v1", new OpenApiInfo { Title = "API Docs", Version = "v1" });
+            });
 
             //configure authentication
 
@@ -88,6 +94,14 @@ namespace smart_tour_api
                 .AllowAnyOrigin()
                 .AllowAnyMethod()
                 .AllowAnyHeader());
+
+            app.UseSwagger();
+
+            app.UseSwaggerUI(c =>
+            {
+                c.SwaggerEndpoint(url:"/swagger/v1/swagger.json",name: "API V1");
+                //c.RoutePrefix = string.Empty;
+            });
 
             app.UseEndpoints(endpoints =>
             {

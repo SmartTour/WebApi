@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using smart_tour_api.Data;
 
 namespace smart_tour_api.Migrations
 {
     [DbContext(typeof(SmartTourContext))]
-    partial class SmartTourContextModelSnapshot : ModelSnapshot
+    [Migration("20200429121904_AddEntities3")]
+    partial class AddEntities3
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

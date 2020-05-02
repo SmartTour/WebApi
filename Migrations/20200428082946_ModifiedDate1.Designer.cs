@@ -10,8 +10,8 @@ using smart_tour_api.Data;
 namespace smart_tour_api.Migrations
 {
     [DbContext(typeof(SmartTourContext))]
-    [Migration("20200422163414_InitialCreate")]
-    partial class InitialCreate
+    [Migration("20200428082946_ModifiedDate1")]
+    partial class ModifiedDate1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -27,6 +27,23 @@ namespace smart_tour_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<string>("Code")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime>("CreationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("LastModifiedDate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2");
+
+                    b.Property<double>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double>("Longitude")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -44,15 +61,20 @@ namespace smart_tour_api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-                    b.Property<int?>("AgencyId")
+                    b.Property<int>("AgencyID")
                         .HasColumnType("int");
+
+                    b.Property<DateTime>("CreationDate")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("FirstName")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<int>("IDAgency")
-                        .HasColumnType("int");
+                    b.Property<DateTime>("LastModifiedDate")
+                        .ValueGeneratedOnAddOrUpdate()
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("LastName")
                         .IsRequired()
@@ -71,7 +93,7 @@ namespace smart_tour_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("AgencyId");
+                    b.HasIndex("AgencyID");
 
                     b.ToTable("Users");
                 });
@@ -80,7 +102,9 @@ namespace smart_tour_api.Migrations
                 {
                     b.HasOne("smart_tour_api.Entities.Agency", "Agency")
                         .WithMany("Users")
-                        .HasForeignKey("AgencyId");
+                        .HasForeignKey("AgencyID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 #pragma warning restore 612, 618
         }

@@ -17,12 +17,12 @@ namespace smart_tour_api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class UserController : ControllerBase
+    public class UsersController : ControllerBase
     {
         private readonly SmartTourContext _context;
         private IUserService _userService;
 
-        public UserController(SmartTourContext context, IUserService userService)
+        public UsersController(SmartTourContext context, IUserService userService)
         {
             _context = context;
             _userService = userService;
@@ -39,13 +39,14 @@ namespace smart_tour_api.Controllers
 
             return Ok(user);
         }
-        [HttpGet("data")]
+        [HttpGet("me")]
         public async Task<ActionResult<User>> GetUserData()
         {
             //var userMaybe = this.User.Identities.First();
             //int id = int.Parse(userMaybe.Name);
-            int id = _userService.GetUserId(this.User);
+            int id = _userService.GetAuthorizedUserId(this.User);
             var user = await _context.Users.FindAsync(id);
+            //User user = await _context.Users.Include(u => u.Agency).FirstOrDefaultAsync(u => u.Id == id);
 
             if (user == null)
             {
@@ -55,10 +56,11 @@ namespace smart_tour_api.Controllers
             return user;
         }
 
-        [HttpPut("data")]
+        [HttpPut("me")]
         public async Task<IActionResult> PutUserData(User user)
         {
-            int id=_userService.GetUserId(this.User);
+
+            int id=_userService.GetAuthorizedUserId(this.User);
             if (id != user.Id)
             {
                 return BadRequest();
@@ -87,8 +89,8 @@ namespace smart_tour_api.Controllers
 
         //API DI SUPPORTO
 
-        // GET: api/User
-        [HttpGet]
+        // GET: api/Users/dev
+        [HttpGet("dev")]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<User>>> GetUsers()
         {
@@ -96,8 +98,8 @@ namespace smart_tour_api.Controllers
         }
 
         [AllowAnonymous]
-        // GET: api/Users/5
-        [HttpGet("{id}")]
+        // GET: api/Users/dev/5
+        [HttpGet("dev/{id}")]
         public async Task<ActionResult<User>> GetUser(int id)
         {
             var user = await _context.Users.FindAsync(id);
@@ -112,11 +114,11 @@ namespace smart_tour_api.Controllers
 
         
 
-        // PUT: api/Users/5
+        // PUT: api/Users/dev/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [AllowAnonymous]
-        [HttpPut("{id}")]
+        [HttpPut("dev/{id}")]
         public async Task<IActionResult> PutUser(int id, User user)
         {
             if (id != user.Id)
@@ -149,7 +151,7 @@ namespace smart_tour_api.Controllers
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
         [AllowAnonymous]
-        [HttpPost]
+        [HttpPost("dev")]
         public async Task<ActionResult<User>> PostUser(User user)
         {
             _context.Users.Add(user);
@@ -158,9 +160,9 @@ namespace smart_tour_api.Controllers
             return CreatedAtAction("GetUser", new { id = user.Id }, user);
         }
 
-        // DELETE: api/Users/5
+        // DELETE: api/Users/dev/5
         [AllowAnonymous]
-        [HttpDelete("{id}")]
+        [HttpDelete("dev/{id}")]
         public async Task<ActionResult<User>> DeleteUser(int id)
         {
             var user = await _context.Users.FindAsync(id);

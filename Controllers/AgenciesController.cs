@@ -27,12 +27,11 @@ namespace smart_tour_api.Controllers
             _userService = userService;
         }
 
-        [HttpGet("data")]
+        [HttpGet("mine")]
         public async Task<ActionResult<Agency>> GetAgency()
         {
-            int userId = _userService.GetUserId(this.User);
-            var user = await _context.Users.FindAsync(userId);
-            var agency= await _context.Agencies.FindAsync(user.IDAgency);
+            int idAgency = await _userService.GetAuthorizedAgencyId(this.User);
+            var agency= await _context.Agencies.FindAsync(idAgency);
 
 
             if (agency == null)
@@ -42,10 +41,41 @@ namespace smart_tour_api.Controllers
 
             return agency;
         }
+        [HttpPut("mine")]
+        public async Task<IActionResult> PutAgency(Agency agency)
+        {
+            int idAgency = await _userService.GetAuthorizedAgencyId(this.User);
+
+            if (idAgency != agency.Id)
+            {
+                return BadRequest();
+            }
+
+            _context.Entry(agency).State = EntityState.Modified;
+
+            try
+            {
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException) //forse non serve
+            {
+                if (!AgencyExists(idAgency))
+                {
+                    return NotFound();
+                }
+                else
+                {
+                    throw;
+                }
+            }
+
+            return NoContent();
+        }
+
 
         //API DI SUPPORTO
         // GET: api/Agencies
-        [HttpGet]
+        [HttpGet("dev")]
         [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Agency>>> GetAgencies()
         {
@@ -53,7 +83,7 @@ namespace smart_tour_api.Controllers
         }
 
         // GET: api/Agencies/5
-        [HttpGet("{id}")]
+        [HttpGet("dev/{id}")]
         public async Task<ActionResult<Agency>> GetAgency(int id)
         {
             var agency = await _context.Agencies.FindAsync(id);
@@ -69,7 +99,7 @@ namespace smart_tour_api.Controllers
         // PUT: api/Agencies/5
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPut("{id}")]
+        [HttpPut("dev/{id}")]
         [AllowAnonymous]
         public async Task<IActionResult> PutAgency(int id, Agency agency)
         {
@@ -102,7 +132,7 @@ namespace smart_tour_api.Controllers
         // POST: api/Agencies
         // To protect from overposting attacks, please enable the specific properties you want to bind to, for
         // more details see https://aka.ms/RazorPagesCRUD.
-        [HttpPost]
+        [HttpPost("dev")]
         [AllowAnonymous]
         public async Task<ActionResult<Agency>> PostAgency(Agency agency)
         {
@@ -113,7 +143,7 @@ namespace smart_tour_api.Controllers
         }
 
         // DELETE: api/Agencies/5
-        [HttpDelete("{id}")]
+        [HttpDelete("dev/{id}")]
         [AllowAnonymous]
         public async Task<ActionResult<Agency>> DeleteAgency(int id)
         {

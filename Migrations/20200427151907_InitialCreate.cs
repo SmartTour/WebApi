@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore.Migrations;
+﻿using System;
+using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace smart_tour_api.Migrations
 {
@@ -12,7 +13,9 @@ namespace smart_tour_api.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
-                    Name = table.Column<string>(nullable: false)
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreationDate = table.Column<DateTime>(nullable: false),
+                    Name = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
@@ -25,29 +28,30 @@ namespace smart_tour_api.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("SqlServer:Identity", "1, 1"),
+                    LastModifiedDate = table.Column<DateTime>(nullable: false),
+                    CreationDate = table.Column<DateTime>(nullable: false),
                     FirstName = table.Column<string>(nullable: false),
                     LastName = table.Column<string>(nullable: false),
                     Username = table.Column<string>(nullable: false),
                     Password = table.Column<string>(nullable: false),
                     Token = table.Column<string>(nullable: true),
-                    IDAgency = table.Column<int>(nullable: false),
-                    AgencyId = table.Column<int>(nullable: true)
+                    AgencyID = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_Users", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_Users_Agencies_AgencyId",
-                        column: x => x.AgencyId,
+                        name: "FK_Users_Agencies_AgencyID",
+                        column: x => x.AgencyID,
                         principalTable: "Agencies",
                         principalColumn: "Id",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_Users_AgencyId",
+                name: "IX_Users_AgencyID",
                 table: "Users",
-                column: "AgencyId");
+                column: "AgencyID");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
