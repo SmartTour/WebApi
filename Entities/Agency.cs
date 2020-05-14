@@ -12,6 +12,8 @@ namespace smart_tour_api.Entities
     {
         [Required]
         public string Name { get; set; }
+        [Required]
+        public string TitleSmartTour { get; set; }
         public string Code { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }

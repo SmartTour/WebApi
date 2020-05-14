@@ -31,7 +31,8 @@ namespace smart_tour_api.Controllers
         public async Task<ActionResult<Agency>> GetAgency()
         {
             int idAgency = await _userService.GetAuthorizedAgencyId(this.User);
-            var agency= await _context.Agencies.FindAsync(idAgency);
+            var agency = await _context.Agencies.FindAsync(idAgency);
+            _context.Entry(agency).Collection(a => a.Users).Load();
 
 
             if (agency == null)
@@ -84,6 +85,7 @@ namespace smart_tour_api.Controllers
 
         // GET: api/Agencies/5
         [HttpGet("dev/{id}")]
+        [AllowAnonymous]
         public async Task<ActionResult<Agency>> GetAgency(int id)
         {
             var agency = await _context.Agencies.FindAsync(id);

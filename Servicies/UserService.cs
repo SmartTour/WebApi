@@ -19,7 +19,6 @@ namespace smart_tour_api.Servicies
         User Authenticate(string username, string password);
         int GetAuthorizedUserId(ClaimsPrincipal user);
         Task<int> GetAuthorizedAgencyId(ClaimsPrincipal user);
-        IEnumerable<User> GetAll();
     }
     public class UserService : IUserService
     {
@@ -70,11 +69,6 @@ namespace smart_tour_api.Servicies
             var idUser = GetAuthorizedUserId(userClaim);
             var user= await _context.Users.FindAsync(idUser);
             return user.AgencyID;
-        }
-
-        public IEnumerable<User> GetAll()
-        {
-            throw new NotImplementedException();
         }
     }
 }
