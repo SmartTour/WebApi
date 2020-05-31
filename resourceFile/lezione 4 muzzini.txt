@@ -1,0 +1,5 @@
+ciccha --> sudo serve per usare i permessi d'amministratore
+
+installa open ssh
+
+sudo apt install openssh-server

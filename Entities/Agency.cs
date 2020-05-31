@@ -22,6 +22,7 @@ namespace smart_tour_api.Entities
         public ICollection<BaseTour> BaseTours { get; set; }
         public ICollection<LiveTour> LiveTours { get; set; }
         public ICollection<Content> Contents { get; set; }
+        public ICollection<ExternalMedia> ExternalMedias { get; set; }
         public ICollection<DetectionElement> DetectionElements { get; set; }
 
     }

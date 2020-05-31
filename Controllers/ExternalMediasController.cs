@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -14,63 +13,60 @@ namespace smart_tour_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
-    [Authorize]
-    public class BaseToursController : ControllerBase
+    public class ExternalMediasController : ControllerBase
     {
         private readonly SmartTourContext _context;
         private readonly IUserService _userService;
-        public BaseToursController(SmartTourContext context, IUserService userService)
+        public ExternalMediasController(SmartTourContext context, IUserService userService)
         {
             _context = context;
             _userService = userService;
         }
 
-        // GET: api/BaseTours
+        // GET: api/ExternalMedias
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BaseTour>>> GetBaseTours()
+        public async Task<ActionResult<IEnumerable<ExternalMedia>>> GetExternalMedias()
         {
             int idAgency = await _userService.GetAuthorizedAgencyId(this.User);
 
-            return await _context.BaseTours.Where(b=> b.AgencyID==idAgency)
+            return await _context.ExternalMedias.Where(b => b.AgencyID == idAgency)
                 .ToListAsync();
         }
 
-        // GET: api/BaseTours/5
+        // GET: api/ExternalMedias/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BaseTour>> GetBaseTour(int id)
+        public async Task<ActionResult<ExternalMedia>> GetExternalMedia(int id)
         {
             int idAgency = await _userService.GetAuthorizedAgencyId(this.User);
 
-            var baseTour = await _context.BaseTours.Where(b => b.AgencyID == idAgency && b.Id == id).FirstOrDefaultAsync();
+            var externalMedia = await _context.ExternalMedias.Where(b => b.AgencyID == idAgency && b.Id == id).FirstOrDefaultAsync();
 
-            if (baseTour == null)
+            if (externalMedia == null)
             {
                 return NotFound();
             }
 
-            return baseTour;
+            return externalMedia;
         }
 
-        // PUT: api/BaseTours/5
+        // PUT: api/ExternalMedias/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBaseTour(int id, BaseTour baseTour)
+        public async Task<IActionResult> PutExternalMedia(int id, ExternalMedia externalMedia)
         {
             int idAgency = await _userService.GetAuthorizedAgencyId(this.User);
 
-            
-            if (id != baseTour.Id)
+            if (id != externalMedia.Id)
             {
                 return BadRequest();
             }
-            //var oldBaseTour = await _context.BaseTours.Where(b => b.AgencyID == idAgency && b.Id == id).FirstOrDefaultAsync();
-            if (baseTour.AgencyID != idAgency)
+            if (externalMedia.AgencyID != idAgency)
             {
                 return BadRequest(new { message = "resource is not yours" });
             }
-            
-            _context.Entry(baseTour).State = EntityState.Modified;
+
+            _context.Entry(externalMedia).State = EntityState.Modified;
 
             try
             {
@@ -78,7 +74,7 @@ namespace smart_tour_api.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BaseTourExists(id))
+                if (!ExternalMediaExists(id))
                 {
                     return NotFound();
                 }
@@ -91,45 +87,46 @@ namespace smart_tour_api.Controllers
             return NoContent();
         }
 
-        // POST: api/BaseTours
+        // POST: api/ExternalMedias
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<BaseTour>> PostBaseTour(BaseTour baseTour)
+        public async Task<ActionResult<ExternalMedia>> PostExternalMedia(ExternalMedia externalMedia)
         {
             int idAgency = await _userService.GetAuthorizedAgencyId(this.User);
-            baseTour.AgencyID = idAgency;
-            
-            _context.BaseTours.Add(baseTour);
+            externalMedia.AgencyID = idAgency;
+
+            _context.ExternalMedias.Add(externalMedia);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBaseTour", new { id = baseTour.Id }, baseTour);
+            return CreatedAtAction("GetExternalMedia", new { id = externalMedia.Id }, externalMedia);
         }
 
-        // DELETE: api/BaseTours/5
+        // DELETE: api/ExternalMedias/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<BaseTour>> DeleteBaseTour(int id)
+        public async Task<ActionResult<ExternalMedia>> DeleteExternalMedia(int id)
         {
-            var baseTour = await _context.BaseTours.FindAsync(id);
-            if (baseTour == null)
+            var externalMedia = await _context.ExternalMedias.FindAsync(id);
+            if (externalMedia == null)
             {
                 return NotFound();
             }
+
             int idAgency = await _userService.GetAuthorizedAgencyId(this.User);
-            if (baseTour.AgencyID != idAgency)
+            if (externalMedia.AgencyID != idAgency)
             {
                 return BadRequest(new { message = "resource is not yours" });
             }
 
-            _context.BaseTours.Remove(baseTour);
+            _context.ExternalMedias.Remove(externalMedia);
             await _context.SaveChangesAsync();
 
-            return baseTour;
+            return externalMedia;
         }
 
-        private bool BaseTourExists(int id)
+        private bool ExternalMediaExists(int id)
         {
-            return _context.BaseTours.Any(e => e.Id == id);
+            return _context.ExternalMedias.Any(e => e.Id == id);
         }
     }
 }

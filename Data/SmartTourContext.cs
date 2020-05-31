@@ -1,4 +1,5 @@
-﻿using JetBrains.Annotations;
+﻿
+using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using smart_tour_api.Entities;
 using System;
@@ -20,15 +21,14 @@ namespace smart_tour_api.Data
         public DbSet<Agency> Agencies { get; set; }
         public DbSet<BaseTour> BaseTours { get; set; }
         public DbSet<LiveTour> LiveTours { get; set; }
+        public DbSet<Phrase> Phrases { get; set; }
         public DbSet<Content> Contents { get; set; }
+        public DbSet<ExternalMedia> ExternalMedias { get; set; }
         public DbSet<Indication> Indications { get; set; }
         public DbSet<DetectionElement> DetectionElements { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-
-            //Realazioni
-
             //BaseTourZone
             modelBuilder.Entity<BaseTourZone>()
                 .HasOne(entity => entity.BaseTour)
@@ -77,11 +77,11 @@ namespace smart_tour_api.Data
 
             foreach (var entityEntry in entries)
             {
-                ((BaseEntity)entityEntry.Entity).CreationDate = DateTime.Now;
+                ((BaseEntity)entityEntry.Entity).LastModifiedDate = DateTime.Now;
 
                 if (entityEntry.State == EntityState.Added)
                 {
-                    ((BaseEntity)entityEntry.Entity).LastModifiedDate = DateTime.Now;
+                    ((BaseEntity)entityEntry.Entity).CreationDate = DateTime.Now;
                 }
             }
             return base.SaveChangesAsync(cancellationToken);

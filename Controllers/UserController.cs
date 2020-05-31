@@ -20,7 +20,7 @@ namespace smart_tour_api.Controllers
     public class UsersController : ControllerBase
     {
         private readonly SmartTourContext _context;
-        private IUserService _userService;
+        private readonly IUserService _userService;
 
         public UsersController(SmartTourContext context, IUserService userService)
         {

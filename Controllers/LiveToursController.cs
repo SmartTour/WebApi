@@ -15,62 +15,61 @@ namespace smart_tour_api.Controllers
     [Route("api/[controller]")]
     [ApiController]
     [Authorize]
-    public class BaseToursController : ControllerBase
+    public class LiveToursController : ControllerBase
     {
         private readonly SmartTourContext _context;
-        private readonly IUserService _userService;
-        public BaseToursController(SmartTourContext context, IUserService userService)
+        private IUserService _userService;
+
+        public LiveToursController(SmartTourContext context, IUserService userService)
         {
             _context = context;
             _userService = userService;
         }
 
-        // GET: api/BaseTours
+        // GET: api/LiveTours
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BaseTour>>> GetBaseTours()
+        public async Task<ActionResult<IEnumerable<LiveTour>>> GetLiveTours()
         {
             int idAgency = await _userService.GetAuthorizedAgencyId(this.User);
-
-            return await _context.BaseTours.Where(b=> b.AgencyID==idAgency)
+            return await _context.LiveTours.Where(b => b.AgencyID == idAgency)
                 .ToListAsync();
         }
 
-        // GET: api/BaseTours/5
+        // GET: api/LiveTours/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<BaseTour>> GetBaseTour(int id)
+        public async Task<ActionResult<LiveTour>> GetLiveTour(int id)
         {
             int idAgency = await _userService.GetAuthorizedAgencyId(this.User);
 
-            var baseTour = await _context.BaseTours.Where(b => b.AgencyID == idAgency && b.Id == id).FirstOrDefaultAsync();
+            var liveTour = await _context.LiveTours.Where(b => b.AgencyID == idAgency && b.Id == id).FirstOrDefaultAsync();
 
-            if (baseTour == null)
+            if (liveTour == null)
             {
                 return NotFound();
             }
 
-            return baseTour;
+            return liveTour;
         }
 
-        // PUT: api/BaseTours/5
+        // PUT: api/LiveTours/5
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPut("{id}")]
-        public async Task<IActionResult> PutBaseTour(int id, BaseTour baseTour)
+        public async Task<IActionResult> PutLiveTour(int id, LiveTour liveTour)
         {
             int idAgency = await _userService.GetAuthorizedAgencyId(this.User);
 
-            
-            if (id != baseTour.Id)
+            if (id != liveTour.Id)
             {
                 return BadRequest();
             }
-            //var oldBaseTour = await _context.BaseTours.Where(b => b.AgencyID == idAgency && b.Id == id).FirstOrDefaultAsync();
-            if (baseTour.AgencyID != idAgency)
+
+            if (liveTour.AgencyID != idAgency)
             {
                 return BadRequest(new { message = "resource is not yours" });
             }
-            
-            _context.Entry(baseTour).State = EntityState.Modified;
+
+            _context.Entry(liveTour).State = EntityState.Modified;
 
             try
             {
@@ -78,7 +77,7 @@ namespace smart_tour_api.Controllers
             }
             catch (DbUpdateConcurrencyException)
             {
-                if (!BaseTourExists(id))
+                if (!LiveTourExists(id))
                 {
                     return NotFound();
                 }
@@ -91,45 +90,44 @@ namespace smart_tour_api.Controllers
             return NoContent();
         }
 
-        // POST: api/BaseTours
+        // POST: api/LiveTours
         // To protect from overposting attacks, enable the specific properties you want to bind to, for
         // more details, see https://go.microsoft.com/fwlink/?linkid=2123754.
         [HttpPost]
-        public async Task<ActionResult<BaseTour>> PostBaseTour(BaseTour baseTour)
+        public async Task<ActionResult<LiveTour>> PostLiveTour(LiveTour liveTour)
         {
             int idAgency = await _userService.GetAuthorizedAgencyId(this.User);
-            baseTour.AgencyID = idAgency;
-            
-            _context.BaseTours.Add(baseTour);
+            liveTour.AgencyID = idAgency;
+
+            _context.LiveTours.Add(liveTour);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction("GetBaseTour", new { id = baseTour.Id }, baseTour);
+            return CreatedAtAction("GetLiveTour", new { id = liveTour.Id }, liveTour);
         }
 
-        // DELETE: api/BaseTours/5
+        // DELETE: api/LiveTours/5
         [HttpDelete("{id}")]
-        public async Task<ActionResult<BaseTour>> DeleteBaseTour(int id)
+        public async Task<ActionResult<LiveTour>> DeleteLiveTour(int id)
         {
-            var baseTour = await _context.BaseTours.FindAsync(id);
-            if (baseTour == null)
+            var liveTour = await _context.LiveTours.FindAsync(id);
+            if (liveTour == null)
             {
                 return NotFound();
             }
             int idAgency = await _userService.GetAuthorizedAgencyId(this.User);
-            if (baseTour.AgencyID != idAgency)
+            if (liveTour.AgencyID != idAgency)
             {
                 return BadRequest(new { message = "resource is not yours" });
             }
-
-            _context.BaseTours.Remove(baseTour);
+            _context.LiveTours.Remove(liveTour);
             await _context.SaveChangesAsync();
 
-            return baseTour;
+            return liveTour;
         }
 
-        private bool BaseTourExists(int id)
+        private bool LiveTourExists(int id)
         {
-            return _context.BaseTours.Any(e => e.Id == id);
+            return _context.LiveTours.Any(e => e.Id == id);
         }
     }
 }
