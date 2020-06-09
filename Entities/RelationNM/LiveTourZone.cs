@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace smart_tour_api.Entities
 {
-    public class LiveTourZone:BaseEntity
+    public class LiveTourZone: EntityOfAgency
     {
         public int LiveTourID { get; set; }
         public LiveTour LiveTour { get; set; }

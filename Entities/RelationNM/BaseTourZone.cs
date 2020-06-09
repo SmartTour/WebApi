@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 
 namespace smart_tour_api.Entities
 {
-    public class BaseTourZone:BaseEntity
+    public class BaseTourZone:EntityOfAgency
     {
         public int ContentID { get; set; }
         public Content Content { get; set; }

@@ -1,4 +1,5 @@
 ﻿
+
 using JetBrains.Annotations;
 using Microsoft.EntityFrameworkCore;
 using smart_tour_api.Entities;
@@ -86,5 +87,6 @@ namespace smart_tour_api.Data
             }
             return base.SaveChangesAsync(cancellationToken);
         }
+        public DbSet<smart_tour_api.Entities.BaseTourZone> BaseTourZone { get; set; }
     }
 }

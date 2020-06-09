@@ -94,6 +94,9 @@ namespace smart_tour_api.Migrations
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+                    b.Property<int>("AgencyID")
+                        .HasColumnType("int");
+
                     b.Property<int>("BaseTourID")
                         .HasColumnType("int");
 
@@ -274,6 +277,9 @@ namespace smart_tour_api.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("int")
                         .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
+
+                    b.Property<int>("AgencyID")
+                        .HasColumnType("int");
 
                     b.Property<int>("ContentID")
                         .HasColumnType("int");
