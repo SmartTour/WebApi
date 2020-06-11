@@ -88,5 +88,6 @@ namespace smart_tour_api.Data
             return base.SaveChangesAsync(cancellationToken);
         }
         public DbSet<smart_tour_api.Entities.BaseTourZone> BaseTourZone { get; set; }
+        public DbSet<smart_tour_api.Entities.LiveTourZone> LiveTourZone { get; set; }
     }
 }

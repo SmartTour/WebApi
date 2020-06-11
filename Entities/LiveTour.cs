@@ -7,6 +7,6 @@ namespace smart_tour_api.Entities
 {
     public class LiveTour : Tour
     {
-        public ICollection<LiveTourZone> LiveTourZones { get; internal set; }
+        public ICollection<LiveTourZone> LiveTourZones { get; set; }
     }
 }

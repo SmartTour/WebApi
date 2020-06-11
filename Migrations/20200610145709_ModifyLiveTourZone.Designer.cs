@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using smart_tour_api.Data;
 
 namespace smart_tour_api.Migrations
 {
     [DbContext(typeof(SmartTourContext))]
-    partial class SmartTourContextModelSnapshot : ModelSnapshot
+    [Migration("20200610145709_ModifyLiveTourZone")]
+    partial class ModifyLiveTourZone
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -452,7 +454,8 @@ namespace smart_tour_api.Migrations
                     b.HasOne("smart_tour_api.Entities.DetectionElement", "DetectionElement")
                         .WithMany("LiveTourZones")
                         .HasForeignKey("DetectionElementID")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
 
                     b.HasOne("smart_tour_api.Entities.LiveTour", "LiveTour")
                         .WithMany("LiveTourZones")
@@ -463,7 +466,8 @@ namespace smart_tour_api.Migrations
                     b.HasOne("smart_tour_api.Entities.Indication", "NextIndication")
                         .WithMany("LiveTourZones")
                         .HasForeignKey("NextIndicationID")
-                        .OnDelete(DeleteBehavior.NoAction);
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("smart_tour_api.Entities.User", b =>
