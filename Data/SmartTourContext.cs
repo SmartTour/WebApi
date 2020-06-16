@@ -32,16 +32,17 @@ namespace smart_tour_api.Data
         {
             //BaseTourZone
             modelBuilder.Entity<BaseTourZone>()
-                .HasOne(entity => entity.BaseTour)
+                .HasOne<BaseTour>()
                 .WithMany(relationEntity => relationEntity.BaseTourZones)
                 .HasForeignKey(entity => entity.BaseTourID)
                 .OnDelete(DeleteBehavior.NoAction);
 
             modelBuilder.Entity<BaseTourZone>()
-                .HasOne(entity => entity.Content)
-                .WithMany(relationEntity => relationEntity.BaseTourZones)
+                .HasOne<Content>(entity => entity.Content)
+                .WithMany()
                 .HasForeignKey(entity => entity.ContentID)
                 .OnDelete(DeleteBehavior.NoAction);
+            
 
             //LiveTourZone
             modelBuilder.Entity<LiveTourZone>()

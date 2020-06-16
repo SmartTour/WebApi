@@ -23,9 +23,10 @@ namespace smart_tour_api.Controllers
 
         // GET: api/PublicBaseTours
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<BaseTour>>> GetBaseTours()
+        public async Task<ActionResult<IEnumerable<BaseTour>>> GetBaseTours(int idAgency)
         {
-            return await _context.BaseTours.ToListAsync();
+            return await _context.BaseTours.Where(b => b.AgencyID == idAgency)
+                .ToListAsync();
         }
 
         // GET: api/PublicBaseTours/5
@@ -40,6 +41,7 @@ namespace smart_tour_api.Controllers
             }
 
             _context.Entry(baseTour).Collection(b => b.BaseTourZones).Load();
+
             return baseTour;
         }
     }

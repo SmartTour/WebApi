@@ -43,7 +43,9 @@ namespace smart_tour_api
             {
                 c.SwaggerDoc(name:"v1", new OpenApiInfo { Title = "API Docs", Version = "v1" });
             });
-
+        //    services.AddMvc().AddJsonOptions(
+        //    options => options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+        //);
             //configure authentication
 
             // configure strongly typed settings objects

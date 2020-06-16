@@ -25,7 +25,13 @@ namespace smart_tour_api.Controllers
             _context = context;
             _userService = userService;
         }
-
+        // GET: api/Phrases/public
+        [HttpGet("public")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<Phrase>>> GetPhrasesPublic(int agencyId)
+        {
+            return await _context.Phrases.Where(b => b.AgencyID == agencyId).ToListAsync();
+        }
         // GET: api/Phrases
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Phrase>>> GetPhrases()

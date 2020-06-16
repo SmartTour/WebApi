@@ -25,7 +25,14 @@ namespace smart_tour_api.Controllers
             _context = context;
             _userService = userService;
         }
+        //GET: api/BaseTourZones/public
+        [HttpGet("public")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<BaseTourZone>>> GetBaseTourZonePublic(int agencyId,int baseTourId)
+        {
+            return await _context.BaseTourZone.Where(b => b.AgencyID == agencyId && b.BaseTourID == baseTourId).Include(b=>b.Content).ToListAsync();
 
+        }
         //GET: api/BaseTourZones
         [HttpGet]
         public async Task<ActionResult<IEnumerable<BaseTourZone>>> GetBaseTourZoneFiltered(int contentId,int baseTourId)

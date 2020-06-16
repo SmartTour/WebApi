@@ -12,7 +12,6 @@ namespace smart_tour_api.Entities
         public string UrlContent { get; set; }
         public string ContentHtml { get; set; }
         public string UrlImage { get; set; }
-        public ICollection<BaseTourZone> BaseTourZones { get; set; }
         public ICollection<LiveTourZone> LiveTourZones { get; set; }
 
     }

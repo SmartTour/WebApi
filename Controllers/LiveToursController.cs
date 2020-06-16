@@ -26,6 +26,13 @@ namespace smart_tour_api.Controllers
             _userService = userService;
         }
 
+        [HttpGet("public")]
+        [AllowAnonymous]
+        public async Task<ActionResult<IEnumerable<LiveTour>>> GetLiveToursPublic(int agencyId)
+        {
+            return await _context.LiveTours.Where(b => b.AgencyID == agencyId)
+                .ToListAsync();
+        }
         // GET: api/LiveTours
         [HttpGet]
         public async Task<ActionResult<IEnumerable<LiveTour>>> GetLiveTours()
